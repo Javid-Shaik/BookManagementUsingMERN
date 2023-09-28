@@ -1,0 +1,227 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins" , sans-serif;
+}
+::-webkit-scrollbar{
+    width: 10xp;
+}
+::-webkit-scrollbar-track{
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb{
+    background: #888;
+}
+
+::selection{
+    background: rgb(0,123,255,0.3);
+}
+html {
+    height: 100%;
+}
+  
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+footer {
+    margin-top: auto;
+    text-align: center;
+    color: #ccc;
+    padding-top: 10px;
+    background-color: #333;
+} 
+  
+.content {
+    max-width: 1250px;
+    margin: auto;
+    padding: 0 30px;
+}
+.navbar.sticky {
+    background : #007bff;
+    padding: 10px 0;
+    box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.1);
+    
+}
+.navbar {
+    position:fixed;
+    width: 100%;
+    top: 0;
+    z-index: 9999;
+    padding: 22px 0;
+    transition: all 0.3s ease;
+    background: #a09ea02f;
+}
+
+.navbar .content{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar .logo a{
+    color: #ebe0e0;
+    font-size: 30px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.navbar .menu-list{
+    display: inline-flex;
+}
+.menu-list li {
+    list-style: none;
+}
+.menu-list li a{
+    color: #ccc;
+    font-size: 18px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    margin-left: 25px;
+}
+
+.menu-list.sticky li a{
+    color: #ccc;
+}
+.menu-list li a:hover{
+    color:#007bff
+}
+.menu-list.sticky li a:hover{
+    color: #1b1b1b;
+}
+.icon {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ccc;
+    padding-left: 15px;
+    cursor: pointer;
+    display: none;
+}
+.icon:hover{
+    color:#75b3b3
+}
+
+.menu-list input{
+    font-size: 18px;
+    font-family: "Poppins",sans-serif;
+    outline: none;
+    border: none;
+    border-radius: 2px;
+    width: 200px;
+}
+.search {
+    color:#ccc;
+    font-size: 18px;
+    padding-left: 10px;
+    background-size: 0px;
+    caret-color: #1b1b1b; 
+}
+.search .drop-down {
+    font-size: 18px;
+    border: none;
+    outline: none;
+    padding-right: 5px;
+    margin-right: 5px;
+    font-family: "Arial" , 'Segoe UI', Tahoma, Verdana, sans-serif;
+}
+.search i{
+    padding-left: 7px;
+    cursor: pointer;
+}
+.search select {
+    cursor: pointer;
+}
+.search select , option , input {
+    color: #1b1b1b;
+}
+.icon.cancel-btn{
+    position: absolute;
+    right: 30px;
+    top :20px;
+}
+
+.profile img {
+    width: 35px; 
+    height: 35px; 
+    border-radius: 50%;
+    object-fit: cover;
+    margin-left: 20px;
+}
+.profile li a:hover{
+    background-image: black;
+}
+
+
+@media (max-width : 768px){
+    .icon{
+        display: block;
+    }
+    .icon.hide {
+        display: none;
+    }
+    .profile img{
+        display: flex;
+        align-items: center;
+        position:fixed;
+        top: 15px;
+    }
+     .navbar .menu-list{
+        width: 95%;
+        position: fixed;
+        top: 0;
+        left: -100%; 
+        background: #1f1e1e;
+        padding: 20px 0;
+        height: 100vh;
+        max-width: 300px;
+        display: block;
+        text-align: center;
+        transition: all 0.3s ease;
+    } 
+    .navbar .menu-list.active {
+        left:0;
+    }
+    .navbar .menu-list li{
+        margin-top: 25px;
+        font-size:12px;
+    }
+    .navbar.show .menu-list{
+        left: 0%;
+    }
+    .navbar .menu-list li a{
+        font-size: 12px;
+        margin-left: 10px;
+        transition: 0.6s cubic-bezier(0.68, -0.55,0.265,1.55);
+    }
+    .navbar.show .menu-list a{
+        margin-left: 0px;
+    }
+    .menu-list.sticky li a:hover{
+        color: #007bff;
+    }
+    .search {
+        margin-top: 30px;
+    }
+    .search input {
+        font-size: 12px;
+        width: 70px;
+    }
+    .search .drop-down {
+        font-size: 12px;
+        width: 50px;
+        cursor: pointer;
+    }
+    .search i{
+        padding-left: 7px;
+    }
+    .footer {
+        font-size: 10px;
+    }
+}
+

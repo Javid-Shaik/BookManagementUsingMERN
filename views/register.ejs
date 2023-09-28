@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Page</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+</head>
+<body>
+    <div class="wrapper">
+        <section class="form signup">
+            <header> Bookstore Management System</header>
+            <form action="/register" enctype="multipart/form-data" method="post">
+                <% if (errorMessage.length>0) { %>
+                <div class="error-txt" style="display: block;">
+                    <p>
+                        <%= errorMessage %>
+                    </p>
+                </div>
+                <% } %>
+                <div class="name-details">
+                    <div class="field input">
+                        <label>First Name</label>
+                        <input type="text" name="fname" placeholder="First Name" required>
+                    </div>
+                    <div class="field input">
+                        <label>Last Name</label>
+                        <input type="text" name="lname" placeholder="Last Name" required>
+                    </div>
+                </div>
+                <div class="field input">
+                    <label>Username</label>
+                    <input type="text" name="username" placeholder="Enter Username" required>
+                </div>
+                <div class="field input">
+                    <label>Email</label>
+                    <input type="text" name="email" placeholder="Enter your email" required>
+                </div>
+                <div class="field input">
+                    <label>Password</label>
+                    <input type="password" name="password" placeholder="Enter new password" required>
+                    <i class="fas fa-eye"></i>
+                </div>
+                <div class="field image">
+                    <label>Select Image</label>
+                    <input type="file" name="profileImage">
+                </div>
+                <div class="field button">
+                    <input type="submit" value="Continue to Read"/>
+                </div>
+            </form>
+            <div class="link">Already signed up? <a href="/login">Login</a></div>
+        </section>
+    </div>
+    <script src="js/pass-show-hide.js"></script>
+    <!-- <script src="{% static 'js/password-validation.js' %}"></script> -->
+</body>
+</html>
