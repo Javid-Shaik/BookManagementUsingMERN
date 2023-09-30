@@ -25,6 +25,10 @@ const userSchema = mongoose.Schema({
     image :{
         type:Buffer,
         required:false,
+    },
+    imgPath:{
+      type:String,
+      required:true,
     }
 });
 

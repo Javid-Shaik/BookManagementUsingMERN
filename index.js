@@ -145,7 +145,7 @@ const upload = multer({
 
 app.get('/index', (req, res) => {
   const user = req.session.user;
-  res.render('index', { books: [], user: { image: { data: Buffer, contentType: 'image/jpeg' } } });
+  res.render('index', { user });
 });
 
 app.get('/register', (req, res) => {
@@ -158,9 +158,6 @@ app.get('/login', (req, res) => {
   res.render('login' , { errorMessage });
 });
 
-app.get('/' ,(req , res)=>{
-  res.render('index');
-})
 
 
 
@@ -170,7 +167,7 @@ app.post('/login', authController.login);
 app.post('/register', upload.single('profileImage'), async (req, res) => {
   try {
     const { fname, lname, username, email, password  } = req.body;
-
+    const default_img = getDefaultImageBuffer();
     const usernameExists = await User.findOne({ userName: username });
     const emailExists = await User.findOne({ email: email });
 
@@ -181,46 +178,26 @@ app.post('/register', upload.single('profileImage'), async (req, res) => {
       // Pass the error message to the template
       return res.render('register', { errorMessage });
     }
-
-    if (!req.body.image) {
-      // If no image is uploaded, use the default image
-      const defaultImageBuffer = getDefaultImageBuffer();
-      if (!defaultImageBuffer) {
-        console.error('Default image not available.');
-        return res.status(500).json({ error: 'Internal server error' });
-      }
-
-      const newUser = new User({
-        firstName: fname,
-        lastName: lname,
-        userName: username,
-        email: email,
-        password: password, // Store the Buffer directly
-        image:defaultImageBuffer,
-      });
-
-      await newUser.save();
-
-      return res.redirect('/login');
+    let imageBuffer=default_img;
+    let imagePath = 'default_img.jpg';
+    if(req.file){
+      imageBuffer = req.file.buffer;
+      imagePath = req.file.filename;
     }
-
-    // If an image is uploaded, use the provided image
-    const profileImage = {
-      data: req.file.buffer,
-      contentType: req.file.mimetype,
-    };
-
+    else {
+      imageBuffer = default_img;
+    }
     const newUser = new User({
       firstName: fname,
       lastName: lname,
       userName: username,
       email: email,
       password: password,
-      image:profileImage,
+      image: imageBuffer,
+      imgPath: imagePath, 
     });
 
     await newUser.save();
-
     res.redirect('/login');
   } catch (error) {
     console.error('Error registering user:', error);
@@ -237,8 +214,14 @@ app.post('/index' , (req, res)=>{
 
 app.get('/logout', (req, res) => {
   req.logout(()=>{}); // This function is provided by Passport for session-based authentication
-  res.redirect('/login'); // Redirect the user to the login page or any other page you prefer
+  res.redirect('/index'); // Redirect the user to the login page or any other page you prefer
 });
+
+app.get('/user/profile' , (req , res)=>{
+  const user = req.session.user;
+  res.render('userProfile' , { user });
+})
+
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

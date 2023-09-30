@@ -43,10 +43,10 @@
                 <% } %>
                 
                 <div class="profile">
-                    <% if (user && user.image && user.image.data && user.image.contentType) { %>
-                        <li><a href="#"><img src="static/<%= user.image %>" alt="Profile Picture"></a></li>
+                    <% if (user ) { %>
+                        <li><a href="/user/profile"><img src="/images/<%= user.profileImage %>" alt="Profile Picture"></a></li>
                       <% } else { %>
-                        <li><a href="#"><img src="/images/default_user.jpg" alt="Default Profile Picture"></a></li>
+                        <li><a href="/user/profile"><img src="/images/default_user.jpg" alt="Default Profile Picture"></a></li>
                       <% } %>
                 </div>
             </ul>

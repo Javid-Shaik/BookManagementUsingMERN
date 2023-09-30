@@ -27,13 +27,18 @@ exports.login = async (req, res) => {
         return res.redirect('/index'); // Redirect to the dashboard or any other route
       }
     req.session.user = {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email:user.email,
         username: user.userName,
-        profileImage: user.profileImage,
+        profileImage: user.image,
+        imagePath : user.imagePath,
+
     }
     // Redirect to a user dashboard or another protected route after login
     res.redirect('/index');
   } catch (error) {
     // Handle login errors (e.g., incorrect credentials)
-    res.status(401).render('login', { error }); // Render the login form with an error message
+    res.status(401).render('login', { errorMessage:"Invalid Credentials" }); // Render the login form with an error message
   }
 };
