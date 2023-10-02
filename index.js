@@ -1,6 +1,7 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
+
 passport.use(new LocalStrategy(
   async (username, password, done) => {
     try {
@@ -57,9 +58,11 @@ const fs = require('fs');
 
 const User = require('./models/userSchema');
 const session = require('express-session');
+const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 const authController = require('./controllers/authController');
-
+const sendTokenResponse = require('./controllers/tokenGeneration');
+const router  = require('./controllers/updateProfile');
 
 dotenv.config()
 
@@ -79,6 +82,7 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(cookieParser());
 
 // app.use((req, res, next) => {
 //   console.log('Session Data:', req.session);
@@ -164,6 +168,7 @@ app.get('/login', (req, res) => {
 app.post('/login', authController.login);
 
 
+
 app.post('/register', upload.single('profileImage'), async (req, res) => {
   try {
     const { fname, lname, username, email, password  } = req.body;
@@ -198,6 +203,9 @@ app.post('/register', upload.single('profileImage'), async (req, res) => {
     });
 
     await newUser.save();
+    sendTokenResponse(newUser , res);
+
+
     res.redirect('/login');
   } catch (error) {
     console.error('Error registering user:', error);
@@ -219,10 +227,32 @@ app.get('/logout', (req, res) => {
 
 app.get('/user/profile' , (req , res)=>{
   const user = req.session.user;
-  res.render('userProfile' , { user });
+  if(user){
+    res.render('userProfile' , { user });
+  }
+  else res.redirect('/login');
 })
 
 
+app.use(router);
+
+app.get('/user/update_profile' , (req, res)=>{
+  const user = req.session.user;
+  if(user)
+  {
+    res.render('updateUserProfile' , {user});
+  }
+  else res.redirect('/login');
+})
+
+
+app.post('/user/update_profile' ,(req, res)=>{
+  const user = req.session.user;
+  if(user){
+    const username = user.username;
+    const userFound = User.findById
+  }
+})
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
