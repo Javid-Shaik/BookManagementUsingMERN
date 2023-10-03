@@ -4,19 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
+    <link rel="stylesheet" href="/css/profile.css"> <!-- Add the path to your CSS file -->
 </head>
 <body>
     <% if (user) { %>
     <div class="profile">
-        <p>First Name: <%= user.firstName %></p>
-        <p>Last Name: <%= user.lastName %></p>
-        <p>username : <%= user.username %></p>
-        <p>Email: <%= user.email %></p>
-        <p>Image Path: /images/<%= user.imagePath %></p>
-        <img src="/images/<%= user.imagePath %>">
+        <div class="profile-info">
+            <p>First Name: <%= user.firstName %></p>
+            <p>Last Name: <%= user.lastName %></p>
+            <p>Username: <%= user.userName %></p>
+            <p>Email: <%= user.email %></p>
+        </div>
+        <div class="profile-image">
+            <% if(user) { %> 
+                <img src="/user/profileImage/<%= user._id %>" alt="Profile Image" />
+            <% } else { %>
+                <img src="/images/default_user.jpg" alt="Default Profile Picture">
+            <% } %>
+        </div>
     </div>
-    <div class="edit-profile">
-        <a href="/user/update_profile">Edit Pofile</a>
+    <div class="buttons">
+        <a href="/user/update_profile" class="edit-profile-button">Edit Profile</a>
+        <a href="/logout" class="logout-button">Sign Out</a>
     </div>
     <% } %>
 </body>

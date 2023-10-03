@@ -30,25 +30,27 @@
                     </div>
                 </li>
                 <li><a href="/index">Home</a></li>
-                <li><a href="#">Quest</a></li>
+                <li><a href="#">Add to cart</a></li>
                 <% if(user) { %>
                     <li>
-                        <a href="#">Borrow Books</a> 
-                        <a href="/logout">Sign out</a>
-                        <!-- <li><a href="#"><img src="<%= user.profileImage %>" alt="Profile Picture"></a></li> -->
+                        <a href="#">View Cart</a>
                     </li>
-                <% } else { %> 
-                    <li><a href="/register">Sign Up</a></li>
-                    <li><a href="/login">Sign In</a></li>
+                <% } else { %>
+                    <li>
+                        <a href="/login">Sign in</a>
+                    </li>
                 <% } %>
-                
-                <div class="profile">
-                    <% if (user ) { %>
-                        <li><a href="/user/profile"><img src="/images/<%= user.profileImage %>" alt="Profile Picture"></a></li>
-                      <% } else { %>
-                        <li><a href="/user/profile"><img src="/images/default_user.jpg" alt="Default Profile Picture"></a></li>
-                      <% } %>
-                </div>
+                <% if (user)  { %>
+                        <div class="profile">
+                            <% if (user) { %>
+                                <li><a href="/profile/<%= user.username %>"><img src="/user/profileImage/<%= user.user_id %>" alt="Profile Picture"></a></li>
+                              <% } else { %>
+                                <li><a href="/profile/<%= user.username %>"><img src="/images/default_user.jpg" alt="Default Profile Picture"></a></li>
+                              <% } %>
+                        </div>
+                <% } else { %>
+                    <li><a href="/register">Sign Up</a></li>
+                <% } %>
             </ul>
             <div class="icon menu-btn">
                 <i class="fas fa-bars"></i>

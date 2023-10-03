@@ -22,9 +22,8 @@ const userSchema = mongoose.Schema({
         type:String,
         required:true,
     },
-    image :{
-        type:Buffer,
-        required:false,
+    profileImage: {
+      type: Buffer, // Store the image data as a Buffer
     },
     imgPath:{
       type:String,
@@ -32,25 +31,7 @@ const userSchema = mongoose.Schema({
     }
 });
 
-userSchema.pre('save', async function (next) {
-    try {
-      const salt = await bcryptjs.genSalt(10);
-      const hashedPassword = await bcryptjs.hash(this.password, salt);
-      this.password = hashedPassword;
-      next();
-    } catch (error) {
-      next(error);
-    }
-  });
-  
-  // Compare a given password with the user's hashed password.
-  userSchema.methods.comparePassword = async function (password) {
-    try {
-      return await bcryptjs.compare(password, this.password);
-    } catch (error) {
-      throw error;
-    }
-  };
+
   
 
 const User = mongoose.model('User', userSchema);

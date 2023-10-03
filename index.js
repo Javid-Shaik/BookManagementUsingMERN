@@ -63,6 +63,8 @@ const dotenv = require('dotenv');
 const authController = require('./controllers/authController');
 const sendTokenResponse = require('./controllers/tokenGeneration');
 const router  = require('./controllers/updateProfile');
+const { profile } = require('console');
+const bcryptjs = require('bcryptjs');
 
 dotenv.config()
 
@@ -125,6 +127,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.static(path.join(__dirname, 'static')));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 function getDefaultImageBuffer() {
   try {
@@ -163,6 +166,26 @@ app.get('/login', (req, res) => {
 });
 
 
+app.get('/user/profileImage/:userId', async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+
+    if (!user || !user.imgPath) {
+      // Return a default image or an error image if the user or image is not found
+      return res.sendFile(path.join(__dirname, 'static/images/default_user.jpg'));
+    }
+
+    // Serve the user's profile image
+    res.sendFile(path.join(__dirname, 'static/images', user.imgPath));
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error fetching profile image.');
+  }
+});
+
+
+
 
 
 app.post('/login', authController.login);
@@ -171,7 +194,7 @@ app.post('/login', authController.login);
 
 app.post('/register', upload.single('profileImage'), async (req, res) => {
   try {
-    const { fname, lname, username, email, password  } = req.body;
+    const { fname, lname, username, email, password } = req.body;
     const default_img = getDefaultImageBuffer();
     const usernameExists = await User.findOne({ userName: username });
     const emailExists = await User.findOne({ email: email });
@@ -183,28 +206,31 @@ app.post('/register', upload.single('profileImage'), async (req, res) => {
       // Pass the error message to the template
       return res.render('register', { errorMessage });
     }
-    let imageBuffer=default_img;
-    let imagePath = 'default_img.jpg';
-    if(req.file){
-      imageBuffer = req.file.buffer;
+
+    let imageBuffer = default_img;
+    let imagePath = 'default_user.jpg';
+    if (req.file) {
+      // console.log('Image file uploaded:', req.file);
+      imageBuffer = req.file.buffer; // Corrected this line
+      // console.log("image Buffer :" , imageBuffer);
       imagePath = req.file.filename;
     }
-    else {
-      imageBuffer = default_img;
-    }
+
+    const salt = await bcryptjs.genSalt(10);
+    const hashedPassword = await bcryptjs.hash(password, salt);
+
     const newUser = new User({
       firstName: fname,
       lastName: lname,
       userName: username,
       email: email,
-      password: password,
-      image: imageBuffer,
-      imgPath: imagePath, 
+      password: hashedPassword,
+      profileImage: imageBuffer, // Corrected this line
+      imgPath: imagePath,
     });
 
     await newUser.save();
-    sendTokenResponse(newUser , res);
-
+    sendTokenResponse(newUser, res);
 
     res.redirect('/login');
   } catch (error) {
@@ -212,8 +238,6 @@ app.post('/register', upload.single('profileImage'), async (req, res) => {
     res.status(500).json({ error: 'An error occurred during registration.' });
   }
 });
-
-
 
 app.post('/index' , (req, res)=>{
   const user = req.session.user;
@@ -225,13 +249,29 @@ app.get('/logout', (req, res) => {
   res.redirect('/index'); // Redirect the user to the login page or any other page you prefer
 });
 
-app.get('/user/profile' , (req , res)=>{
-  const user = req.session.user;
-  if(user){
-    res.render('userProfile' , { user });
+
+app.get('/profile/:username', async (req, res) => {
+  try {
+    const { username } = req.params;
+    // console.log(username);
+    const user = await User.findOne({ userName:username });
+    // console.log(user);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Send user data, including the image filename
+    else {
+      res.render('userProfile' , { user });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error retrieving user profile' });
   }
-  else res.redirect('/login');
-})
+});
+
+
 
 
 app.use(router);
@@ -246,13 +286,66 @@ app.get('/user/update_profile' , (req, res)=>{
 })
 
 
-app.post('/user/update_profile' ,(req, res)=>{
+app.post('/user/update_profile', upload.single('profileImage'), async (req, res) => {
   const user = req.session.user;
-  if(user){
-    const username = user.username;
-    const userFound = User.findById
+  try {
+    const { fname, lname, email } = req.body;
+
+    if (user) {
+      let imageBuffer = user.profileImage;
+      let imagePath = user.imagePath;
+
+      if (req.file) {
+        if (imagePath && imagePath !== 'default_user.jpg') {
+          const pathh = path.join(__dirname, 'static/images', imagePath);
+          console.log('Attempting to delete:', pathh);
+        
+          fs.promises.unlink(pathh)
+            .then(() => {
+              console.log('File deleted successfully');
+            })
+            .catch((err) => {
+              console.error('Error deleting file:', err);
+            });
+        }
+        imageBuffer = req.file.buffer;
+        imagePath = req.file.filename;
+      }
+
+      const userId = user.user_id; // Get the user's unique identifier (e.g., _id)
+      const userUpdation = await User.findByIdAndUpdate(
+        userId, // Use the user's _id as the filter
+        {
+          firstName: fname,
+          lastName: lname,
+          email: email,
+          profileImage: imageBuffer,
+          imgPath: imagePath,
+        }
+      );
+      userUpdation.save();
+
+      // Update the session data with the new values
+      req.session.user.firstName = fname;
+      req.session.user.lastName = lname;
+      req.session.user.email = email;
+      req.session.user.userName = user.username;
+      req.session.user.profileImage = imageBuffer;
+      req.session.user.imagePath = imagePath;
+      req.session.user._id = userId;
+
+      res.render('userProfile', { user: req.session.user }); // Redirect to the user's profile
+    } else {
+      res.status(401).send('Unauthorized'); // Handle the case where the user is not logged in
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error updating profile.');
   }
-})
+});
+
+
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

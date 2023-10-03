@@ -1,295 +1,91 @@
-/* Reset default styles */
-
+/* Profile page CSS */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Poppins" , sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
+
+/* Profile page CSS */
+
 body {
-    background: #1b1b1b;
-}
-main {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-}
-.component {
-    margin-left: 20px;
-    margin-top: 110px;
-    background: #494747;
-    width: 400px;
-    height: 100%;
-    color: #fff;
-    border-radius: 10px;
-
-}
-.component .user {
-    font-size: 18px;
-    display: flex;
-    align-items: center;
-    padding-bottom: 10px;
-    border-radius: 10px;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
 }
 
-.profile-picture img {
-    margin-top:10px;
-    width: 80px; 
-    height: 80px; 
-    border-radius: 15%;
-    object-fit:cover;
-    margin-left: 20px;
-    margin-right: 40px;
+.background-image {
+  background-image: url('https://as2.ftcdn.net/v2/jpg/01/64/37/35/1000_F_164373509_V2qqmZuSVW1Wrtp6LpW1YVvABdr12cAO.jpg'); /* Replace with the URL of your background image */
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.component .user-info {
-    margin: 10px;
-    font-size: 18px;
-    padding-left: 20px;
-    padding-bottom: 10px;
+.profile {
+  background-color: rgba(255, 255, 255, 0.8); /* Add a semi-transparent background to the profile box */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px #ccc;
 }
 
-.component .actions {
-    display: flex;
-    flex-direction:unset;
-    margin: 10px;
-    
-}
-.component .edit-btn button {
-    width: 250px;
-    height: 30px;
-    text-align: center;
-    color: #14e625;
-    background: #344b34;
-    border: none;
-    border-radius: 5px;
-    font-size: 18px;
-    margin-left: 75px;
-    font-weight: 500;
-    cursor: pointer;
-}
-.component .actions button {
-    width: 130px;
-    padding: 10px 10px 10px 10px;
-    height: 40px;
-    text-align: center;
-    color: #1b1b1b;
-    background: #929191;
-    border: none;
-    border-radius: 5px;
-    font-size: 15px;
-    margin-left: 15px;
-    cursor: pointer;
-}
-.component .actions button:hover{
-    background-color: #a3a7a3;
-}
-.activity {
-    margin-top: 40px;
-    color: #ccc;
-    margin-left: 20px;
-    margin-right: 20px;
+.profile-info {
+  flex-grow: 1;
 }
 
-.activity ul {
-    list-style: none;
-}
-.activity table {
-    border: 1px solid greenyellow;
-    border-style: inset;
-    background: #464747;
-    color: #ccc;
-} 
-
-
-.activity td p {
-    font-size: 12px;
+.profile p {
+  margin-bottom: 10px;
 }
 
-.user-profile {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  .member-details,
-  .activity {
-    margin-bottom: 20px;
-  }
-  
-  .activity h2 {
-    margin-bottom: 10px;
-  }
-  
-  .activity table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .activity th,
-  .activity td {
-    padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid #ccc;
-  }
-  
-  .activity .cover-image {
-    width: 75px;
-    height: 100px;
-    margin-right: 10px;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .activity .cover-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 5px;
-  }
-  
-  strong {
-    font-weight: bold;
-  }
-/* .no-data p{
-    margin-top: 150px;
-    margin-left: 50px;
-    font-size: 20px;
-    color: #ccc;
-}  */
-.return-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 20px;
-    background-color: #f55911;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    font-size: 14px;
-    cursor: pointer;
-    line-height: 1px;
-    height: 30px;
-  }
-  .return-button a{
-    text-decoration: none;
-    margin-right: 8px;
-  }
-  
-  .return-button:hover {
-    background-color: #d61a1aaf;
-  }
-  
-  .return-button:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.3);
-  }
-
-
-@media (max-width: 868px){
-    .activity {
-      margin-left: 0;
-      margin-right: 0;
-      overflow-x: auto;
-    }
-    main {
-        display: flex;
-        flex-direction: column;
-    }
-    .component {
-        width: 300px;
-        height:320px;
-        margin-left: 10px;
-    }
-    .component .user {
-        font-size: 18px;
-        display: flex;
-        align-items: center;
-        padding-bottom: 10px;
-        border-radius: 10px;
-    }
-    .component .user-info {
-        margin: 5px;
-        font-size: 12px;
-        padding-left: 10px;
-        padding-bottom: 5px;
-    }
-    .component .edit-btn button {
-        width: 200px;
-        height: 30px;
-        text-align: center;
-        color: #14e625;
-        background: #344b34;
-        border: none;
-        border-radius: 5px;
-        font-size: 12px;
-        margin-left: 35px;
-        font-weight: 500;
-        cursor: pointer;
-    }
-    
-    .profile-picture img {
-        margin-top:10px;
-        width: 60px; 
-        height: 60px; 
-        border-radius: 15%;
-        object-fit:cover;
-        margin-left: 15px;
-        margin-right: 25px;
-    }
-    .component .user-name {
-        font-size: 12px;
-    }
-    .activity {
-        margin-top: 10px;
-        color: #ccc;
-        margin-left: 10px;
-        font-size: 10px;
-    }
-    .activity th,
-    .activity td {
-      padding: 5px;
-      font-size: 10px;
-
-    }
-
-    .activity .cover-image {
-        width: 50px;
-        height: 70px;
-        margin-right: 2px;
-      }
-
-      .return-button {
-        padding: 5px 10px;
-        border-radius: 4px;
-        font-size: 12px;
-      }
-      .return-button a{
-        text-decoration: none;
-        margin-right: 8px;
-      }
-      .component .actions {
-        margin: 0; 
-
-      }
+.profile img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+  animation: pulse 2s infinite alternate;
 }
 
+.buttons {
+  text-align: center;
+  margin-top: 20px;
+}
 
-@media (max-width: 768px) {
-  .component {
-      margin-top: 110px; 
+.edit-profile-button, .logout-button {
+  color: #fff;
+  padding: 10px 20px;
+  margin: 0 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.edit-profile-button {
+  background-color: #007bff;
+}
+
+.logout-button {
+  background-color: #dc3545;
+}
+
+/* Animations */
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
   }
-
-  .profile-picture img {
-      margin-right: 20px;
+  50% {
+    transform: scale(1.1);
   }
-
-  .activity {
-      margin-left: 0;
-      margin-right: 0;
-      overflow-x: auto;
+  100% {
+    transform: scale(1);
   }
 }
