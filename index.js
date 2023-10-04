@@ -65,6 +65,7 @@ const sendTokenResponse = require('./controllers/tokenGeneration');
 const router  = require('./controllers/updateProfile');
 const { profile } = require('console');
 const bcryptjs = require('bcryptjs');
+const Book = require('./models/bookSchema');
 
 dotenv.config()
 
@@ -157,12 +158,12 @@ app.get('/index', (req, res) => {
 
 app.get('/register', (req, res) => {
   const errorMessage = "";
-  res.render('register' , { errorMessage });
+  res.render('register' , { errorMessage , user:req.session.user });
 });
 
 app.get('/login', (req, res) => {
   const errorMessage = "";
-  res.render('login' , { errorMessage });
+  res.render('login' , { errorMessage , user:req.session.user});
 });
 
 
@@ -345,6 +346,165 @@ app.post('/user/update_profile', upload.single('profileImage'), async (req, res)
 });
 
 
+
+// Books views starts from here
+
+app.get('/admin' , async (req, res)=>{
+  try {
+    const users = req.session.user;
+    // console.log(users.username);
+    const user = await User.findOne({ userName: users.username });
+    if(user.isSuperUser && user.isSuperUser===true){
+      res.render('books_curd');
+    }
+    else {
+      res.status(500).json({ message: 'you are not an admin' });
+    }
+  }
+  catch(err){
+    res.status(500).send('Error navigating to admin page.');
+  }
+  
+})
+
+
+// Handle the POST request to store book details
+app.post('/add-book', upload.single('coverImage'), async (req, res) => {
+  try {
+    // Extract data from the request
+    const { title, author, isbn, price, publishedYear, genre, copiesAvailable, description, publisher } = req.body;
+
+    // Get the cover image buffer from multer
+    const coverImage = req.file ? req.file.filename : '';
+    // Create a new instance of the Book model
+    const newBook = new Book({
+      title,
+      author,
+      isbn,
+      price,
+      published_year: publishedYear, // Match the field name in your schema
+      genre: Array.isArray(genre) ? genre : [genre], // Ensure it's an array
+      copies_available: copiesAvailable, // Match the field name in your schema
+      description,
+      publisher,
+      cover_image: coverImage, // Match the field name in your schema
+    });
+
+    // Save the new book to the database
+    await newBook.save();
+
+    res.status(201).json({ message: 'Book saved successfully', book: newBook });
+  } catch (error) {
+    console.error('Error saving book:', error);
+    res.status(500).json({ error: 'An error occurred while saving the book' });
+  }
+});
+
+app.get('/admin/book-list', async (req, res) => {
+  try {
+    // Use the find() method to retrieve all books from the database
+    const books = await Book.find();
+
+    // Render the HTML template with the retrieved books data
+    res.render('book-list', { books });
+  } catch (error) {
+    console.error('Error retrieving books:', error);
+    res.status(500).json({ error: 'An error occurred while retrieving books' });
+  }
+});
+
+
+app.put('/admin/books/:bookId', upload.single('coverImage'), async (req, res) => {
+  try {
+    // Get book data from the request body
+    const bookId = req.params.bookId;
+
+    const { title, author, isbn, price, published_year, genre, copies_available, description, publisher } = req.body;
+
+    const book = Book.findById(bookId);
+    const previmg = book.cover_image;
+    // Check if a new cover image was uploaded
+    let coverImage = req.file ? req.file.filename : previmg;
+
+    // Find and update the book in the database
+    const updatedBook = await Book.findByIdAndUpdate(
+      bookId,
+      {
+        title,
+        author,
+        isbn,
+        price,
+        published_year,
+        genre: genre.split(',').map((genre) => genre.trim()), // Convert genre to an array
+        copies_available,
+        description,
+        publisher,
+        cover_image: coverImage, // Update the cover image filename
+      },
+      { new: true }
+    );
+
+    if (!updatedBook) {
+      return res.status(404).json({ error: 'Book not found' });
+    }
+
+    res.json(updatedBook);
+  } catch (error) {
+    console.error('Error updating book:', error);
+    res.status(500).json({ error: 'An error occurred while updating the book' });
+  }
+});
+
+
+app.delete('/admin/books/:bookId', async (req, res) => {
+  try {
+      const bookId = req.params.bookId;
+
+      // Find and delete the book by its ID
+      const deletedBook = await Book.findByIdAndRemove(bookId);
+
+      if (!deletedBook) {
+          return res.status(404).json({ error: 'Book not found' });
+      }
+
+      // Return a successful response with status code 204 (No Content)
+      res.status(204).end();
+  } catch (error) {
+      console.error('Error deleting book:', error);
+      res.status(500).json({ error: 'An error occurred while deleting the book' });
+  }
+});
+
+app.delete('/admin/users/:userId' , async (req,res)=>{
+  try{
+    const userId = req.params.userId;
+
+    const deletedUser = await User.findByIdAndRemove(userId);
+
+    if(!deletedUser) {
+      return res.status(404).json({ error : 'User not found'});
+
+    }
+
+    res.status(204).end();
+
+  } catch(error){
+    console.log('Error deleting user');
+    res.status(500).json({error: 'An error occurred while deleteing the user'});
+  }
+});
+
+app.get('/admin/user-list' , async (req, res)=>{
+  try {
+    const users = await User.find({});
+
+
+    res.render('./admin/users-list', { users });
+  } catch(error){
+    console.error('Error retrieving users:', error);
+    res.status(500).json({ error: 'An error occurred while retrieving users' });
+  }
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

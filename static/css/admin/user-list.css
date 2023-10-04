@@ -1,0 +1,106 @@
+/* Apply styles to the body */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+/* Style the header */
+h1 {
+    background-color: #007BFF;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    margin: 0;
+}
+
+/* Style the user list container */
+#userList {
+    list-style: none;
+    padding: 0;
+    margin: 20px auto; /* Center the user list */
+    display: flex;
+    flex-wrap: wrap; /* Wrap to the next row if necessary */
+    justify-content: space-between; /* Space between users */
+    max-width: 1000px; /* Limit the width of the user list */
+}
+
+/* Style individual user list items */
+li {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    width: calc(25% - 20px); /* 4 users per row, with spacing */
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+/* Style the delete button with a trash icon */
+button {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button:hover {
+    background-color: #c82333;
+}
+
+/* Add some spacing between user details */
+li strong {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+/* Add a subtle box shadow and float effect on hover */
+li:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Define the flex container for the user list */
+.user-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Center the items horizontally */
+}
+
+/* Style each user box */
+.user-box {
+    flex: 0 0 calc(33.33% - 20px); /* Three boxes in each row with gaps */
+    margin: 10px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    box-sizing: border-box;
+    position: relative;
+    transition: transform 0.2s; /* Add transition for the hover effect */
+}
+
+/* Style the delete button */
+.delete-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+/* Add hover effect for the user box */
+.user-box:hover {
+    transform: scale(1.05); /* Scale up on hover */
+}
+

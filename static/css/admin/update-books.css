@@ -1,0 +1,180 @@
+/* Reset some default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Set a background color and font family for the entire page */
+body {
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+    padding: 10px;
+    background-image: url('https://cdn.pixabay.com/photo/2016/04/15/04/02/water-1330252_1280.jpg');
+    background-repeat: no-repeat;
+}
+
+/* Style for the page title */
+h1 {
+    text-align: center;
+    color: #0e3d04;
+    margin-bottom: 20px;
+}
+
+/* Style for the book list container */
+#bookList {
+    list-style: none;
+}
+
+/* Style for each book item */
+li {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    margin-bottom: 5px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    height: 20px;
+}
+
+/* Style for book title */
+span {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    flex-grow: 1;
+    margin-right: 20px;
+}
+
+/* Style for the "Change" button */
+button {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 0;
+}
+
+/* Style for the edit form */
+form {
+    display: none;
+    flex-direction: column;
+    margin-top: 470px;
+    margin-left: 20px;
+}
+
+/* Style for labels */
+label {
+    font-size: 12px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+/* Style for input fields */
+input[type="text"],
+input[type="number"],
+textarea {
+    font-size: 12px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+.form-group textarea{
+    font-size: 12px;
+}
+/* Style for the Save and Cancel buttons */
+button[type="button"] {
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+button[type="button"]:hover {
+    background-color: #0056b3;
+}
+
+/* Style for the Cancel button */
+button[type="button"].cancel {
+    background-color: #ccc;
+    color: #333;
+}
+
+button[type="button"].cancel:hover {
+    background-color: #999;
+}
+
+/* Custom styles for the form container */
+.custom-form {
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+/* Custom styles for input fields */
+.custom-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Custom styles for buttons */
+.custom-button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Custom primary button style */
+.custom-primary-button {
+    background-color: #007bff;
+    color: #fff;
+
+}
+
+/* Custom secondary button style */
+.custom-secondary-button {
+    background-color: #ccc;
+    color: #333;
+}
+
+/* Style form group divs for spacing */
+/* .form-group {
+    margin-bottom: 5px;
+} */
+
+/* Style button group div */
+.button-group {
+    text-align: right;
+}
+
+.change-button {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+}
+.delete-button {
+    background:none;
+    border: none;
+    color: red;
+    cursor: pointer;
+}
+i {
+    margin-left: 20px;
+}
+

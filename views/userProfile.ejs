@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
-    <link rel="stylesheet" href="/css/profile.css"> <!-- Add the path to your CSS file -->
+    <link rel="stylesheet" href="/css/profile.css">
 </head>
 <body>
+    <div class="background-image">
     <% if (user) { %>
-    <div class="profile">
+    <div class="profiles">
         <div class="profile-info">
+            <h2>My Profile</h2>
             <p>First Name: <%= user.firstName %></p>
             <p>Last Name: <%= user.lastName %></p>
             <p>Username: <%= user.userName %></p>
@@ -24,9 +26,13 @@
         </div>
     </div>
     <div class="buttons">
+        <% if( user ) { %>
+        <a href="/index" class="edit-profile-button">Home</a>
         <a href="/user/update_profile" class="edit-profile-button">Edit Profile</a>
         <a href="/logout" class="logout-button">Sign Out</a>
+        <% } %>
     </div>
     <% } %>
+</div>
 </body>
 </html>

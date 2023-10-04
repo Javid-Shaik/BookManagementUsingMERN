@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User List</title>
+    <!-- Include a CSS library for styling -->
+    <link rel="stylesheet" href="/css/admin/user-list.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+    
+</head>
+<body>
+    <h1>User List</h1>
+
+    <div id="userList" class="user-grid">
+        <!-- User data will be added here -->
+        <% users.forEach((user)=>{ %>
+            <div class="user-box" data-user-id="<%= user._id %>">
+                <strong>Name:</strong> <%= user.firstName %> <%= user.lastName %><br>
+                <strong>Username:</strong> <%= user.userName %><br>
+                <strong>Email:</strong> <%= user.email %><br>
+                <% const timestamp = user.createdAt %>
+                <% const date = new Date(timestamp); %>
+                <% const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }; %>
+                <% const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date); %>
+                <strong>Created At:</strong> <%= formattedDate %><br>
+                <!-- Use a trash icon for delete -->
+                <span class="delete-button" onclick="deleteUser('<%= user._id %>')"><i class="fas fa-trash"></i></span>
+            </div>
+        <% }); %>
+    </div>
+
+    <script>
+        // Function to fetch and display users
+        function fetchUsers() {
+            event.preventDefault();
+            fetch('/admin/user-list')
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Failed to fetch users');
+                    }
+                })
+                .then((users) => {
+                    const userList = document.querySelector('.user-grid');
+                    userList.innerHTML = ''; // Clear the existing user list
+
+                    if (users.length === 0) {
+                        // Handle the case when there are no users to display
+                        userList.innerHTML = '<p>No users found.</p>';
+                    } else {
+                        users.forEach((user) => {
+                            const userBox = document.createElement('div');
+                            userBox.className = 'user-box';
+                            userBox.dataset.userId = user._id;
+                            userBox.innerHTML = `
+                                <strong>Name:</strong> ${user.firstName} ${user.lastName}<br>
+                                <strong>Username:</strong> ${user.userName}<br>
+                                <strong>Email:</strong> ${user.email}<br>
+                                <strong>Created At:</strong> ${formatDate(user.createdAt)}<br>
+                                <!-- Use a trash icon for delete -->
+                                <span class="delete-button" onclick="deleteUser('${user._id}')"><i class="fas fa-trash"></i></span>
+                            `;
+                            userList.appendChild(userBox);
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error fetching users:', error);
+                    // Handle the error here, e.g., display an error message on the page
+                    const userList = document.querySelector('.user-grid');
+                    userList.innerHTML = '<p>Error fetching users. Please try again later.</p>';
+                });
+        }
+
+        // Function to format a timestamp as a date string
+        function formatDate(timestamp) {
+            const date = new Date(timestamp);
+            const options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                second: 'numeric',
+            };
+            return new Intl.DateTimeFormat('en-US', options).format(date);
+        }
+
+        // Function to delete a user and reposition user boxes
+        function deleteUser(userId) {
+            const confirmation = confirm('Are you sure you want to delete this user?');
+            
+            if (confirmation) {
+                fetch(`/admin/users/${userId}`, {
+                    method: 'DELETE',
+                })
+                .then((response) => {
+                    if (response.status === 204) {
+                        // Remove the deleted user box from the DOM
+                        const deletedUserBox = document.querySelector(`.user-box[data-user-id="${userId}"]`);
+                        if (deletedUserBox) {
+                            deletedUserBox.remove();
+                        }
+                    } else {
+                        console.error('Error deleting user:', response.statusText);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error deleting user:', error);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

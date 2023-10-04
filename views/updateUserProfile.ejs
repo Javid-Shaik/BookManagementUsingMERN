@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Profile</title>
-    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
 </head>
 <body>
+    <%- include('index.ejs' , { user: user }) %>
     <div class="wrapper">
         <section class="form signup">
             <header> Bookstore Management System</header>
@@ -31,12 +32,12 @@
                     <input type="file" name="profileImage">
                 </div>
                 <div class="field button">
-                    <input type="submit" value="Continue to Read"/>
+                    <input type="submit" value="Continue to Edit"/>
                 </div>
             </form>
         </section>
     </div>
-    <script src="js/pass-show-hide.js"></script>
+    <!-- <script src="/js/pass-show-hide.js"></script> -->
     <!-- <script src="{% static 'js/password-validation.js' %}"></script> -->
 </body>
 </html>

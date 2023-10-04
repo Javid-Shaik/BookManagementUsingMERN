@@ -15,7 +15,7 @@ body {
 }
 
 .background-image {
-  background-image: url('https://as2.ftcdn.net/v2/jpg/01/64/37/35/1000_F_164373509_V2qqmZuSVW1Wrtp6LpW1YVvABdr12cAO.jpg'); /* Replace with the URL of your background image */
+  background-image: url('https://images.pexels.com/photos/66997/pexels-photo-66997.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); 
   background-size: cover;
   background-position: center;
   min-height: 100vh;
@@ -24,14 +24,14 @@ body {
   align-items: center;
 }
 
-.profile {
+.profiles {
   background-color: rgba(255, 255, 255, 0.8); /* Add a semi-transparent background to the profile box */
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 80%;
   max-width: 600px;
-  margin: 20px auto;
+  margin-top: 100px;
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 2px 5px #ccc;
@@ -41,11 +41,15 @@ body {
   flex-grow: 1;
 }
 
-.profile p {
+.profiles p {
+  margin-bottom: 10px;
+}
+.profile-info h2{
+  text-align: center;
   margin-bottom: 10px;
 }
 
-.profile img {
+.profiles img {
   width: 100px;
   height: 100px;
   border-radius: 50%;
@@ -87,5 +91,15 @@ body {
   }
   100% {
     transform: scale(1);
+  }
+}
+
+@media(max-width:768px){
+  .profile-image img{
+    width: 40px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    animation: pulse 2s infinite alternate;
   }
 }

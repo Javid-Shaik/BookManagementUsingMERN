@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Management</title>
+    <link rel="stylesheet" type="text/css" href="/css/books.css"/>
+</head>
+<body>
+    <h1>Book Management</h1>
+
+    <!-- Add Book Form -->
+    <h2>Add a New Book</h2>
+    <form action="/add-book" method="post" enctype="multipart/form-data">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required><br>
+
+        <label for="author">Author:</label>
+        <input type="text" id="author" name="author" required><br>
+
+        <label for="isbn">ISBN:</label>
+        <input type="text" id="isbn" name="isbn" required><br>
+
+        <label for="coverImage">Cover Image:</label>
+        <input type="file" id="coverImage" name="coverImage" required accept="image/*"><br>
+
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price" required><br>
+
+        <label for="publishedYear">Published Year:</label>
+        <input type="number" id="publishedYear" name="publishedYear"><br>
+
+        <label for="genre">Genre:</label>
+        <input type="text" id="genre" name="genre"><br>
+
+        <label for="copiesAvailable">Copies Available:</label>
+        <input type="number" id="copiesAvailable" name="copiesAvailable"><br>
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description"></textarea><br>
+
+        <label for="publisher">Publisher:</label>
+        <input type="text" id="publisher" name="publisher"><br>
+
+        <input type="submit" value="Add Book">
+    </form>
+
+    <!-- Delete Book Form -->
+    <h2>Delete a Book</h2>
+    <form action="/delete-book" method="post">
+        <label for="deleteBookId">Book ID:</label>
+        <input type="text" id="deleteBookId" name="deleteBookId" required><br>
+
+        <input type="submit" value="Delete Book">
+    </form>
+
+    <!-- Update Book Form -->
+    <h2>Update Book Information</h2>
+    <form action="/update-book" method="post">
+        <label for="updateBookId">Book ID:</label>
+        <input type="text" id="updateBookId" name="updateBookId" required><br>
+
+        <label for="newTitle">New Title:</label>
+        <input type="text" id="newTitle" name="newTitle"><br>
+
+        <label for="newAuthor">New Author:</label>
+        <input type="text" id="newAuthor" name="newAuthor"><br>
+
+        <label for="newISBN">New ISBN:</label>
+        <input type="text" id="newISBN" name="newISBN"><br>
+
+        <label for="newCoverImage">New Cover Image:</label>
+        <input type="file" id="newCoverImage" name="newCoverImage" accept="image/*"><br>
+
+        <label for="newPrice">New Price:</label>
+        <input type="number" id="newPrice" name="newPrice"><br>
+
+        <label for="newPublishedYear">New Published Year:</label>
+        <input type="number" id="newPublishedYear" name="newPublishedYear"><br>
+
+        <label for="newGenre">New Genre:</label>
+        <input type="text" id="newGenre" name="newGenre"><br>
+
+        <label for="newCopiesAvailable">New Copies Available:</label>
+        <input type="number" id="newCopiesAvailable" name="newCopiesAvailable"><br>
+
+        <label for="newDescription">New Description:</label>
+        <textarea id="newDescription" name="newDescription"></textarea><br>
+
+        <label for="newPublisher">New Publisher:</label>
+        <input type="text" id="newPublisher" name="newPublisher"><br>
+
+        <input type="submit" value="Update Book">
+    </form>
+</body>
+</html>
