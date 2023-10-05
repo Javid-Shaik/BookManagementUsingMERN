@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/cart/view-books.css">
+    <title>View Books</title>
+</head>
+<body>
+    <h1>View Books</h1>
+
+    <ul>
+        <% books.forEach((book, index) => { %>
+            <li>
+                <h2><%= book.title %></h2>
+                <p>Author: <%= book.author %></p>
+                <p>ISBN: <%= book.isbn %></p>
+                <!-- Add more book details as needed -->
+                <button onclick="showDetails('<%= book._id %>','<%= user.user_id %>')" id="show-details-btn-<%= book._id %>"><i class="fas fa-info-circle"></i></button>
+                <button onclick="addToCart('<%= book._id %>','<%= user.user_id %>')"><i class="fas fa-cart-plus"></i> </button>
+                <div id="details<%= book._id %>" style="display: none;">
+                    <!-- Book details will be displayed here when the "Show Details" button is clicked -->
+                    <p>Description: <%= book.description %></p>
+                    <!-- Add more book details as needed -->
+                </div>
+            </li>
+        <% }); %>
+    </ul>
+
+    <script>
+        function showDetails(bookId) {
+            const detailsDiv = document.getElementById(`details${bookId}`);
+            const showButton = document.getElementById(`show-details-btn-${bookId}`);
+            if (detailsDiv.style.display === 'none') {
+                detailsDiv.style.display = 'block';
+                showButton.innerHTML = '<i class="fas fa-times-circle"></i>';
+            } else {
+                detailsDiv.style.display = 'none';
+                showButton.innerHTML = '<i class="fas fa-info-circle"></i>';
+            }
+        }
+
+        // Function to add a book to the user's cart
+        async function addToCart(bookId , userId) {
+            try {
+            const response = await fetch('/cart/add-to-cart', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId, bookId }),
+            });
+        
+            if (response.ok) {
+                // Handle success (e.g., show a success message to the user)
+                alert('Book added to cart.');
+            } else {
+                // Handle error (e.g., display an error message)
+                alert('Error adding book to cart.');
+            }
+            } catch (error) {
+            console.error('Error adding to cart:', error);
+            alert('Error adding book to cart.');
+            }
+        }
+
+    </script>
+</body>
+</html>

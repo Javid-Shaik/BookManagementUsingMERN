@@ -66,6 +66,8 @@ const router  = require('./controllers/updateProfile');
 const { profile } = require('console');
 const bcryptjs = require('bcryptjs');
 const Book = require('./models/bookSchema');
+const Cart = require('./models/cartSchema');
+const CartItem = require('./models/cartItemSchema');
 
 dotenv.config()
 
@@ -179,6 +181,24 @@ app.get('/user/profileImage/:userId', async (req, res) => {
 
     // Serve the user's profile image
     res.sendFile(path.join(__dirname, 'static/images', user.imgPath));
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error fetching profile image.');
+  }
+});
+
+app.get('/cart/cover-image/:bookId', async (req, res) => {
+  try {
+    const bookId = req.params.bookId;
+    const book = await Book.findById(bookId);
+
+    if (!book || !book.cover_image) {
+      // Return a default image or an error image if the user or image is not found
+      return res.sendFile(path.join(__dirname, 'static/images/default_user.jpg'));
+    }
+
+    // Serve the user's profile image
+    res.sendFile(path.join(__dirname, 'static/images', book.cover_image));
   } catch (error) {
     console.error(error);
     res.status(500).send('Error fetching profile image.');
@@ -349,27 +369,37 @@ app.post('/user/update_profile', upload.single('profileImage'), async (req, res)
 
 // Books views starts from here
 
-app.get('/admin' , async (req, res)=>{
+async function isAdmin(req, res, next) {
   try {
     const users = req.session.user;
-    // console.log(users.username);
+
+    // Assuming you have a User model for querying the database
     const user = await User.findOne({ userName: users.username });
-    if(user.isSuperUser && user.isSuperUser===true){
-      res.render('books_curd');
+
+    if (user.isSuperUser && user.isSuperUser === true) {
+      // If the user is an admin, continue to the next middleware or route handler
+      next();
+    } else {
+      // If the user is not an admin, redirect to another page (e.g., 'not_admin_page')
+      res.redirect('/not_admin_page');
     }
-    else {
-      res.status(500).json({ message: 'you are not an admin' });
-    }
-  }
-  catch(err){
+  } catch (err) {
+    // Handle any errors that occur during the process
     res.status(500).send('Error navigating to admin page.');
   }
-  
-})
+}
 
+app.get('/admin', isAdmin, (req, res) => {
+  // This route is only accessible to admin users
+  res.render('books_curd'); // Render the 'books_curd' page for admin users
+});
+
+app.get('/not_admin_page', (req, res) => {
+  res.status(403).send('Access denied. You are not an admin.'); // Optionally, provide an error message for non-admins
+});
 
 // Handle the POST request to store book details
-app.post('/add-book', upload.single('coverImage'), async (req, res) => {
+app.post('/add-book', isAdmin , upload.single('coverImage'), async (req, res) => {
   try {
     // Extract data from the request
     const { title, author, isbn, price, publishedYear, genre, copiesAvailable, description, publisher } = req.body;
@@ -400,13 +430,13 @@ app.post('/add-book', upload.single('coverImage'), async (req, res) => {
   }
 });
 
-app.get('/admin/book-list', async (req, res) => {
+app.get('/admin/book-list', isAdmin , async (req, res) => {
   try {
     // Use the find() method to retrieve all books from the database
     const books = await Book.find();
 
     // Render the HTML template with the retrieved books data
-    res.render('book-list', { books });
+    res.render('./admin/book-list', { books });
   } catch (error) {
     console.error('Error retrieving books:', error);
     res.status(500).json({ error: 'An error occurred while retrieving books' });
@@ -494,10 +524,10 @@ app.delete('/admin/users/:userId' , async (req,res)=>{
   }
 });
 
-app.get('/admin/user-list' , async (req, res)=>{
+app.get('/admin/user-list' , isAdmin,  async (req, res)=>{
   try {
-    const users = await User.find({});
 
+    const users = await User.find({});
 
     res.render('./admin/users-list', { users });
   } catch(error){
@@ -505,6 +535,88 @@ app.get('/admin/user-list' , async (req, res)=>{
     res.status(500).json({ error: 'An error occurred while retrieving users' });
   }
 });
+
+app.get('/cart/view-books', async (req , res)=>{
+  try {
+    // Fetch all books from the database
+    const books = await Book.find();
+    const user = req.session.user;
+    res.render('./cart/view-books', { books , user }); // Render the view-book.ejs template and pass the books data
+  } catch (error) {
+    console.error('Error fetching books:', error);
+    res.status(500).json({ error: 'An error occurred while fetching books' });
+  }
+});
+
+app.post('/cart/add-to-cart' , async (req, res)=>{
+    try {
+      const { userId, bookId } = req.body;
+      // Find or create a cart for the user
+      let cart = await Cart.findOne({ userId }).populate('items');
+  
+      if (!cart) {
+        cart = new Cart({ userId });
+        await cart.save();
+      }
+  
+      // Check if the book is already in the cart
+      const existingCartItem = cart.items.find((item) =>
+        item.bookId.equals(bookId)
+      );
+  
+      if (existingCartItem) {
+        // If the book is already in the cart, increase the quantity
+        existingCartItem.quantity += 1;
+        await existingCartItem.save();
+      } else {
+        // If the book is not in the cart, create a new cart item
+        const newCartItem = new CartItem({ bookId });
+        await newCartItem.save();
+        cart.items.push(newCartItem);
+      }
+  
+      // Save the updated cart
+      await cart.save();
+  
+      res.json({ message: 'Book added to cart successfully' });
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      res.status(500).json({ error: 'Error adding to cart' });
+    }
+});
+
+app.get('/cart/view-cart', async (req, res) => {
+  try {
+    // Assuming you have a user ID available in the session
+    const userId = req.session.user.user_id;
+
+    // Find the user's cart and populate the 'items' array with book details
+    const cart = await Cart.findOne({ userId }).populate({
+      path: 'items',
+      populate: {
+        path: 'bookId', // Assuming 'bookId' is the field referencing the Book model in your CartItem schema
+        model: 'Book', // Replace with the actual model name for books
+      },
+    });
+    
+
+    if (!cart || !cart.items) {
+      // If the cart is not found or has no items, you can handle this case accordingly
+      return res.render('cart/view-cart', { cart: [] });
+    }
+
+    // At this point, 'cart.items' should be an array of populated 'CartItem' objects
+    res.render('cart/view-cart', { cart });
+  } catch (error) {
+    console.error('Error fetching cart:', error);
+    res.status(500).json({ error: 'An error occurred while fetching the cart' });
+  }
+});
+
+
+
+
+
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

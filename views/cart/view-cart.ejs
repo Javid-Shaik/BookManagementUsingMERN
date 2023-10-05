@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/cart/cart.css"> <!-- Include your custom CSS here -->
+    <title>My Cart</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>My Cart</h1>
+
+        <div class="row">
+            <div class="col-md-8">
+                <ul class="list-group">
+                    <% cart.items.forEach((item) => { %>
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <img src="/cart/cover-image/<%= item.book %>" alt="<%= item.book.title %>" class="img-fluid">
+                                </div>
+                                <div class="col-md-6">
+                                    <h5><%= item.book.title %></h5>
+                                    <p>Author: <%= item.book.author %></p>
+                                    <p>ISBN: <%= item.book.isbn %></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p>Quantity: <%= item.quantity %></p>
+                                    <button onclick="removeFromCart('<%= item._id %>')" class="btn btn-danger"><i class="fas fa-trash"></i> Remove</button>
+                                </div>
+                            </div>
+                        </li>
+                    <% }); %>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function removeFromCart(cartItemId) {
+            try {
+                const response = await fetch(`/cart/remove-from-cart/${cartItemId}`, {
+                    method: 'DELETE',
+                });
+
+                if (response.ok) {
+                    // Reload the page to reflect the updated cart
+                    location.reload();
+                } else {
+                    // Handle error (e.g., display an error message)
+                    alert('Error removing book from cart.');
+                }
+            } catch (error) {
+                console.error('Error removing from cart:', error);
+                alert('Error removing book from cart.');
+            }
+        }
+    </script>
+</body>
+</html>
