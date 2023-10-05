@@ -53,15 +53,20 @@
             });
         
             if (response.ok) {
-                // Handle success (e.g., show a success message to the user)
-                alert('Book added to cart.');
-            } else {
-                // Handle error (e.g., display an error message)
+                // If the response status is in the 200 range (e.g., 200 OK), handle success
+                const data = await response.json(); // Parse the response body as JSON
+                if (data.message) {
+                  alert(data.message); // Show the success message from the server
+                } else {
+                  alert('Book added to cart.'); // A generic success message
+                }
+              } else {
+                // If the response status is not in the 200 range, handle error
                 alert('Error adding book to cart.');
-            }
+              }
             } catch (error) {
-            console.error('Error adding to cart:', error);
-            alert('Error adding book to cart.');
+              console.error('Error adding to cart:', error);
+              alert('Error adding book to cart.');
             }
         }
 

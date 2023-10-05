@@ -169,48 +169,7 @@ app.get('/login', (req, res) => {
 });
 
 
-app.get('/user/profileImage/:userId', async (req, res) => {
-  try {
-    const userId = req.params.userId;
-    const user = await User.findById(userId);
-
-    if (!user || !user.imgPath) {
-      // Return a default image or an error image if the user or image is not found
-      return res.sendFile(path.join(__dirname, 'static/images/default_user.jpg'));
-    }
-
-    // Serve the user's profile image
-    res.sendFile(path.join(__dirname, 'static/images', user.imgPath));
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Error fetching profile image.');
-  }
-});
-
-app.get('/cart/cover-image/:bookId', async (req, res) => {
-  try {
-    const bookId = req.params.bookId;
-    const book = await Book.findById(bookId);
-
-    if (!book || !book.cover_image) {
-      // Return a default image or an error image if the user or image is not found
-      return res.sendFile(path.join(__dirname, 'static/images/default_user.jpg'));
-    }
-
-    // Serve the user's profile image
-    res.sendFile(path.join(__dirname, 'static/images', book.cover_image));
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Error fetching profile image.');
-  }
-});
-
-
-
-
-
 app.post('/login', authController.login);
-
 
 
 app.post('/register', upload.single('profileImage'), async (req, res) => {
@@ -271,7 +230,27 @@ app.get('/logout', (req, res) => {
 });
 
 
-app.get('/profile/:username', async (req, res) => {
+// User functionalities
+
+app.get('/user/profileImage/:userId', async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+
+    if (!user || !user.imgPath) {
+      // Return a default image or an error image if the user or image is not found
+      return res.sendFile(path.join(__dirname, 'static/images/default_user.jpg'));
+    }
+
+    // Serve the user's profile image
+    res.sendFile(path.join(__dirname, 'static/images', user.imgPath));
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error fetching profile image.');
+  }
+});
+
+app.get('/profile/:username', isAuthenticated,  async (req, res) => {
   try {
     const { username } = req.params;
     // console.log(username);
@@ -307,7 +286,7 @@ app.get('/user/update_profile' , (req, res)=>{
 })
 
 
-app.post('/user/update_profile', upload.single('profileImage'), async (req, res) => {
+app.post('/user/update_profile', isAuthenticated , upload.single('profileImage'), async (req, res) => {
   const user = req.session.user;
   try {
     const { fname, lname, email } = req.body;
@@ -365,9 +344,27 @@ app.post('/user/update_profile', upload.single('profileImage'), async (req, res)
   }
 });
 
+// if the client is autheticated or not
 
+async function isAuthenticated(req, res , next){
+  try{
+    const user = req.session.user;
+    console.log(user);
+    if(user){
+      console.log('in',user);
+      next();
+    }
+    else {
+      res.redirect('/login');
+    }
+  } catch(error){
+    console.log(error);
+    res.status(500).send('Error in authentication');
+  }
+}
 
 // Books views starts from here
+// Admin  functionalities
 
 async function isAdmin(req, res, next) {
   try {
@@ -548,47 +545,79 @@ app.get('/cart/view-books', async (req , res)=>{
   }
 });
 
-app.post('/cart/add-to-cart' , async (req, res)=>{
+// cart functionality
+
+app.get('/cart/cover-image/:bookId', async (req, res) => {
+  try {
+    const bookId = req.params.bookId;
+    const book = await Book.findById(bookId);
+
+    if (!book || !book.cover_image) {
+      // Return a default image or an error image if the user or image is not found
+      return res.sendFile(path.join(__dirname, 'static/images/default_user.jpg'));
+    }
+
+    // Serve the user's profile image
+    res.sendFile(path.join(__dirname, 'static/images', book.cover_image));
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error fetching profile image.');
+  }
+});
+
+app.post('/cart/add-to-cart' , isAuthenticated,  async (req, res)=>{
     try {
       const { userId, bookId } = req.body;
+
+      if (!userId || !bookId) {
+        return res.status(400).json({ error: 'Invalid data. userId and bookId are required.' });
+      }
+
+      const book = await Book.findById(bookId);
+      const enough_copies = book.copies_available;
+      if(enough_copies<=0){
+        return res.json({ message: 'Sorry Not enough copies available' });
+      }
       // Find or create a cart for the user
-      let cart = await Cart.findOne({ userId }).populate('items');
-  
-      if (!cart) {
-        cart = new Cart({ userId });
+      else {
+        let cart = await Cart.findOne({ userId }).populate('items');
+    
+        if (!cart) {
+          cart = new Cart({ userId });
+          await cart.save();
+        }
+    
+        // Check if the book is already in the cart
+        const existingCartItem = cart.items.find((item) =>
+          item.bookId.equals(bookId)
+        );
+    
+        if (existingCartItem) {
+          // If the book is already in the cart, increase the quantity
+          existingCartItem.quantity += 1;
+          await existingCartItem.save();
+        } else {
+          // If the book is not in the cart, create a new cart item
+          const newCartItem = new CartItem({ bookId });
+          await newCartItem.save();
+          cart.items.push(newCartItem);
+        }
+    
+        // Save the updated cart
         await cart.save();
+        res.json({ message: 'Book added to cart successfully' });
       }
-  
-      // Check if the book is already in the cart
-      const existingCartItem = cart.items.find((item) =>
-        item.bookId.equals(bookId)
-      );
-  
-      if (existingCartItem) {
-        // If the book is already in the cart, increase the quantity
-        existingCartItem.quantity += 1;
-        await existingCartItem.save();
-      } else {
-        // If the book is not in the cart, create a new cart item
-        const newCartItem = new CartItem({ bookId });
-        await newCartItem.save();
-        cart.items.push(newCartItem);
-      }
-  
-      // Save the updated cart
-      await cart.save();
-  
-      res.json({ message: 'Book added to cart successfully' });
     } catch (error) {
       console.error('Error adding to cart:', error);
       res.status(500).json({ error: 'Error adding to cart' });
     }
 });
 
-app.get('/cart/view-cart', async (req, res) => {
+app.get('/cart/view-cart', isAuthenticated,  async (req, res) => {
   try {
     // Assuming you have a user ID available in the session
-    const userId = req.session.user.user_id;
+    const user = req.session.user;
+    const userId = user.user_id;
 
     // Find the user's cart and populate the 'items' array with book details
     const cart = await Cart.findOne({ userId }).populate({
@@ -598,7 +627,6 @@ app.get('/cart/view-cart', async (req, res) => {
         model: 'Book', // Replace with the actual model name for books
       },
     });
-    
 
     if (!cart || !cart.items) {
       // If the cart is not found or has no items, you can handle this case accordingly
@@ -613,7 +641,19 @@ app.get('/cart/view-cart', async (req, res) => {
   }
 });
 
+app.delete('/cart/remove-from-cart/:cartItemId', async(req, res)=>{
+  try{
+    const cartItemId = req.params.cartItemId;
+    const removesCartItem = await CartItem.findByIdAndRemove(cartItemId);
 
+    if(!removesCartItem){
+      return res.status(404).json({ error:'Cart Item not found'});
+    }
+    res.status(204).end();
+  } catch(error){
+    console.log(error);
+  }
+});
 
 
 
