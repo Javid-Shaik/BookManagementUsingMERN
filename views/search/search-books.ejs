@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link rel="stylesheet" type="text/css" href="/css/search/search-results.css">
+</head>
+<body>
+    <h1>Search Results</h1>
+    <div class="search-results">
+        <ul id="results-list"></ul>
+        <div class="pagination">
+            <button id="prev-page">Prev</button>
+            <div id="page-num-container"></div>
+            <button id="next-page">Next</button>
+        </div>
+    </div>
+    <script>const searchData = '<%- (data) %>'; </script>
+    <script src="/js/search-results.js"></script>
+</body>
+</html>

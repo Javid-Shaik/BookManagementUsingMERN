@@ -18,14 +18,14 @@
                 <li>
                     <div class="search">
                         <select class="drop-down">
-                            <option value="All">All</option>
+                            <option value="All" selected>All</option>
                             <option value="Title">Title</option>
                             <option value="Author">Author</option>
                             <option value="Isbn">Isbn</option>
                             <option value="Publisher">Publisher</option>
                         </select>
                         <input type="text" name="search" placeholder="Search" class="search-box" required>
-                        <i class="fas fa-search" onclick="book_search()"></i>
+                        <i class="fas fa-search" onclick=book_search()></i>
                     </div>
                 </li>
                 <li><a href="/index">Home</a></li>
@@ -92,15 +92,48 @@
         }
 
         const search_box = document.querySelector(".search-box");
+        const search_option = document.querySelector('.drop-down');
 
-        search_box.addEventListener('keyup', function(event) {
+        
+
+        search_box.addEventListener('keyup', async function(event) {
             // Check if the Enter key was pressed (key code 13)
-            if (event.keyCode === 13) {
+            if(search_box.value.trim().lenght<=2){
+                alert("Please enter some text to search");
+            } else if (event.keyCode === 13) {
               // Call the search function
-              
-            }
+                    book_search();
+            } 
         });
-
+        async function book_search() {
+            try {
+                if (search_box.value.trim().length <= 1) {
+                    alert("Please enter some text to search");
+                    return;
+                }
+                
+                const response = await fetch(`search-book/${search_option.value.trim()}/${search_box.value.trim()}`, {
+                    method: 'GET',
+                });
+        
+                if (response.ok) {
+                    const data = await response.json();
+                    // Check if there are matching books
+                    if (data.matchingBooks.length > 0) {
+                        // Redirect to the search results page
+                        window.location.href = `/search/results?data=${JSON.stringify(data)}`;
+                    } else {
+                        // Handle case where no matching books were found
+                        alert('No matching books found.');
+                    }
+                } else {
+                    console.log('Search results failed');
+                }
+        
+            } catch (error) {
+                console.log('Error searching results :', error);
+            }
+        }        
         
     </script>
     <footer class="footer">

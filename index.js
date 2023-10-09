@@ -272,8 +272,6 @@ app.get('/profile/:username', isAuthenticated,  async (req, res) => {
 });
 
 
-
-
 app.use(router);
 
 app.get('/user/update_profile' , (req, res)=>{
@@ -349,9 +347,7 @@ app.post('/user/update_profile', isAuthenticated , upload.single('profileImage')
 async function isAuthenticated(req, res , next){
   try{
     const user = req.session.user;
-    console.log(user);
     if(user){
-      console.log('in',user);
       next();
     }
     else {
@@ -441,7 +437,7 @@ app.get('/admin/book-list', isAdmin , async (req, res) => {
 });
 
 
-app.put('/admin/books/:bookId', upload.single('coverImage'), async (req, res) => {
+app.put('/admin/books/:bookId', isAdmin , upload.single('coverImage'), async (req, res) => {
   try {
     // Get book data from the request body
     const bookId = req.params.bookId;
@@ -483,7 +479,7 @@ app.put('/admin/books/:bookId', upload.single('coverImage'), async (req, res) =>
 });
 
 
-app.delete('/admin/books/:bookId', async (req, res) => {
+app.delete('/admin/books/:bookId', isAdmin, async (req, res) => {
   try {
       const bookId = req.params.bookId;
 
@@ -502,7 +498,7 @@ app.delete('/admin/books/:bookId', async (req, res) => {
   }
 });
 
-app.delete('/admin/users/:userId' , async (req,res)=>{
+app.delete('/admin/users/:userId' , isAdmin, async (req,res)=>{
   try{
     const userId = req.params.userId;
 
@@ -533,7 +529,7 @@ app.get('/admin/user-list' , isAdmin,  async (req, res)=>{
   }
 });
 
-app.get('/cart/view-books', async (req , res)=>{
+app.get('/cart/view-books', isAuthenticated, async (req , res)=>{
   try {
     // Fetch all books from the database
     const books = await Book.find();
@@ -655,7 +651,75 @@ app.delete('/cart/remove-from-cart/:cartItemId', async(req, res)=>{
   }
 });
 
+// search functionality
 
+app.get('/search-book/:searchOption/:searchText', async (req, res) => {
+  const searchText = req.params.searchText;
+  const searchOption = req.params.searchOption;
+  
+  const search_case = {
+    'All': 1,
+    'Title': 2,
+    'Author': 3,
+    'Isbn': 4,
+    'Publisher': 5,
+  };
+  let matchingBooks = []; // Initialize an empty array to store matching books
+  //  console.log(searchOption , searchText );
+  // console.log(searchOption , search_case[searchOption]);
+  // console.log("option-->", searchOption , search_case[searchOption]);
+  switch (search_case[searchOption]) {
+
+    case 1:
+      // Search in all fields
+      { matchingBooks = await Book.find({
+        $or: [
+          { author: { $regex: new RegExp(searchText, 'i') } },
+          { isbn: { $regex: new RegExp(searchText, 'i') } },
+          { title: { $regex: new RegExp(searchText, 'i') } },
+          { publisher: { $regex: new RegExp(searchText, 'i') } },
+        ],
+      });
+      break; };
+    case 2:
+      // Search by title
+      matchingBooks = await Book.find({
+        title: { $regex: new RegExp(searchText, 'i') },
+      });
+      break;
+    case 3:
+      // Search by author
+      matchingBooks = await Book.find({
+        author: { $regex: new RegExp(`^${searchText}$`, 'i') },
+      });
+      break;
+    case 4:
+      // Search by ISBN
+      matchingBooks = await Book.find({
+        isbn: { $regex: new RegExp(`^${searchText}`, 'i') },
+      });
+      break;
+    case 5:
+      // Search by publisher
+      matchingBooks = await Book.find({
+        publisher: { $regex: new RegExp(`^${searchText}$`, 'i') },
+      });
+      break;
+    default:
+      console.log('default value');
+      break;
+  }
+  // console.log('Matching Books:', matchingBooks);
+
+  res.json({ matchingBooks });
+});
+
+
+app.get('/search/results', (req, res) => {
+  const data = req.query.data;
+  // console.log(data);
+  res.render('search/search-books', { data });
+});
 
 
 const port = process.env.PORT || 3000;
