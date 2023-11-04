@@ -28,6 +28,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100%;
+  background-repeat: no-repeat;
 }
 
 footer {
@@ -39,8 +40,21 @@ footer {
     padding-top: 10px;
     background-color: #d9f7f8;
     width: 100%;
-
 } 
+.footer a {
+    text-align: center;
+    text-decoration: none;
+    text-shadow: #242727;
+    color: #1b1b1b;
+    padding: 0 5px;
+    font-family: Arial, Helvetica, sans-serif ;
+    font-weight: 600;
+    font-style: oblique;
+}
+
+footer a:hover{
+    background-color: rgb(239, 191, 173);
+}
   
 .content {
     max-width: 1250px;

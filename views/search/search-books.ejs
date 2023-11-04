@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="/css/search/search-results.css">
 </head>
 <body>
+    <%- include('../header.ejs') %>
     <h1>Search Results</h1>
     <div class="search-results">
         <ul id="results-list"></ul>
@@ -16,7 +17,7 @@
             <button id="next-page">Next</button>
         </div>
     </div>
-    <script>const searchData = '<%- (data) %>'; </script>
+    <script>const searchData = '<%- (data) %>'; </script> <!-- Sending the searc result data to the js file -->
     <script src="/js/search-results.js"></script>
 </body>
 </html>

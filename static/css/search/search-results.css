@@ -1,16 +1,16 @@
 /* Reset some default browser styles */
-body, ul {
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+ul {
     margin: 0;
     padding: 0;
     list-style: none;
 }
 
-/* Page container styles */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f8f8;
-    padding: 20px;
-}
 
 h1 {
     text-align: center;
@@ -19,7 +19,7 @@ h1 {
 }
 
 .search-results {
-    background-color: #fff;
+    /* background-color: #fff; */
     border-radius: 5px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 20px;
@@ -71,6 +71,7 @@ h1 {
     justify-content: center;
     align-items: center;
     margin-top: 20px;
+    margin-bottom: 40px;
 }
 
 .page-num {

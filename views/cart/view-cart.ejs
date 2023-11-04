@@ -13,30 +13,19 @@
 
         <div class="row">
             <div class="col-md-8">
-                <ul class="list-group">
-                    <% cart.items.forEach((item) => { %>
-                        <li class="list-group-item">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <img src="/cart/cover-image/<%= item.bookId._id %>" alt="<%= item.bookId.title %>" class="img-fluid">
-                                </div>
-                                <div class="col-md-6">
-                                    <h5><%= item.bookId.title %></h5>
-                                    <p>Author: <%= item.bookId.author %></p>
-                                    <p>ISBN: <%= item.bookId.isbn %></p>
-                                </div>
-                                <div class="col-md-3">
-                                    <p>Quantity: <%= item.quantity %></p>
-                                    <button onclick="removeFromCart('<%= item._id %>')" class="btn btn-danger"><i class="fas fa-trash"></i> Remove</button>
-                                </div>
-                            </div>
-                        </li>
-                    <% }); %>
+                <ul class="list-group" id="cart-list">
+                    <!-- Cart items will be dynamically added here -->
                 </ul>
+                <div class="pagination">
+                    <button id="prev-page">Prev</button>
+                    <div id="page-num-container"></div>
+                    <button id="next-page">Next</button>
+                </div>
             </div>
         </div>
     </div>
-
+    <script>const cart = '<%- JSON.stringify(cart) %>'; </script>
+    <script src="/js/view-cart.js"></script>
     <script>
         async function removeFromCart(cartItemId) {
             try {
@@ -59,3 +48,34 @@
     </script>
 </body>
 </html>
+
+
+
+
+
+
+<!-- <div class="row">
+    <div class="col-md-8">
+        <ul class="list-group">
+            <% cart.items.forEach((item) => { %>
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <img src="/cart/cover-image/<%= item.bookId._id %>" alt="<%= item.bookId.title %>" class="img-fluid">
+                        </div>
+                        <div class="col-md-6">
+                            <h5><%= item.bookId?.title ?? 'N/A' %></h5>
+                            <h5><%= item.title %></h5>
+                            <p>Author: <%= item.bookId?.author ?? 'N/A' %></p>
+                            <p>ISBN: <%= item.bookId?.isbn ?? 'N/A' %></p>
+                        </div>
+                        <div class="col-md-3">
+                            <p>Quantity: <%= item.quantity %></p>
+                            <button onclick="removeFromCart('<%= item._id %>')" class="btn btn-danger"><i class="fas fa-trash"></i> Remove</button>
+                        </div>
+                    </div>
+                </li>
+            <% }); %>
+        </ul>
+    </div>
+</div> -->

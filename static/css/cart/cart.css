@@ -1,4 +1,4 @@
-/* Styling for the cart page */
+Styling for the cart page
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
@@ -6,15 +6,7 @@ body {
     padding: 0;
 }
 
-h1 {
-    text-align: center;
-    padding:10px;
-    background-color: #333;
-    color: white;
-    margin: 0;
-}
-
-.cart-items {
+.list-group {
     list-style: none;
     padding: 0;
     display: flex;
@@ -22,25 +14,25 @@ h1 {
     justify-content: space-around;
 }
 
-.cart-item {
+.list-group {
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 5px;
     margin: 10px;
     padding: 10px;
-    width: 300px;
+    width: auto;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
-.cart-item h2 {
+.list-group h2 {
     margin: 0;
 }
 
-.cart-item p {
+.list-group p {
     margin: 5px 0;
 }
 
-.cart-item button {
+.list-group button {
     background-color: #333;
     color: white;
     border: none;
@@ -48,16 +40,89 @@ h1 {
     cursor: pointer;
 }
 
-.cart-item button i {
+.list-group button i {
     margin-right: 5px;
 }
 
-.cart-item button:hover {
+.list-group button:hover {
     background-color: #555;
 }
 
 @media screen and (max-width: 768px) {
-    .cart-item {
+    .list-group {
         width: 100%;
     }
 }
+
+
+
+/* Pagination styles */
+.pagination {
+    position: fixed;
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+    margin-top: 20px;
+    margin-bottom: 40px;
+    left: calc(100% - 60%);
+    top: calc(100% - 20%);
+
+}
+
+.page-num {
+    padding: 5px 10px;
+    margin: 0 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #f5f5f5;
+    color: #333;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.page-num:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.page-num.disabled {
+    cursor: not-allowed;
+    background-color: #ccc;
+    color: #999;
+}
+
+button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .col-md-3 {
+        text-align: center;
+    }
+
+    .col-md-6 h5 {
+        font-size: 16px;
+    }
+
+    .col-md-6 p {
+        font-size: 12px;
+    }
+}
+
+/* Additional Custom Styling */
+/* Add your custom styles here to make it even more beautiful and stylish */
+
+/* You can customize colors, fonts, spacing, and more as needed. */

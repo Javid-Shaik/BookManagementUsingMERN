@@ -23,10 +23,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const book = matchingBooks[i];
 
             const resultItem = document.createElement("li");
+
+            const description = book.description.length > 100 ? book.description.slice(0, 100) + '.....' : book.description;
             resultItem.innerHTML = `
                 <h2>${book.title}</h2>
                 <p>Author: ${book.author}</p>
-                <p>Description: ${book.description}</p>
+                <p>Description: ${description}</p>
                 <p>ISBN: ${book.isbn}</p>
                 <!-- Add more book details as needed -->
                 <img src="/images/${book.cover_image}" alt="${book.title}" class="cover-image">
