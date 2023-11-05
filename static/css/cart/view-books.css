@@ -1,8 +1,173 @@
+/* Reset some default styles for consistency */
+
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+
+
+body, ul {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ccc;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    font-size: 32px;
+    margin: 20px 0;
+}
+
+ul#books-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+ul#books-list {
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    flex: 1;
+    max-width: calc(33.33% - 20px); /* Three items per row */
+    text-align: center;
+}
+
+ul#books-list li h2 {
+    font-size: 20px;
+    margin: 10px 0;
+}
+
+ul#books-list li p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+ul#books-list li button {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+ul#books-list li button:hover {
+    background-color: #0056b3;
+}
+
+ul#books-list li .fas {
+    font-size: 20px;
+    margin-right: 5px;
+}
+
+
+/* Custom styles for the book details section */
+ul#books-list li .fa-info-circle {
+    cursor: pointer;
+}
+
+ul#books-list li .fa-times-circle {
+    cursor: pointer;
+    color: #ff0000;
+}
+
+/* Custom styles for the details div (with adjustments for positioning) */
+ul#books-list li .details {
+    position: fixed;
+    top: 50%; /* Vertical centering */
+    left: 50%; /* Horizontal centering */
+    transform: translate(-50%, -50%); /* Center the div */
+    display: none;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    font-size: 14px;
+    z-index: 1000; /* Ensure it appears above other elements */
+}
+
+/* Media query for responsive design */
+@media screen and (max-width: 768px) {
+    ul#books-list li {
+        max-width: calc(50% - 20px); /* Two items per row on smaller screens */
+    }
+}
+
+/* Styling for the modal container */
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 30%;
+    left: 30%;
+    /* transform: translate(-50%, -50%); */
+    width: 100%;
+    height: 100%;
+    /* background: rgba(0, 0, 0, 0.7); */
+    z-index: 1;
+    overflow: hidden;
+}
+
+/* Styling for the modal content */
+.modal-content {
+    position: relative;
+    background: #ddd;
+    border-radius: 5px;
+    width: 60%;
+    max-width: 600px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Styling for the close button */
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #777;
+}
+
+.close:hover {
+    color: #000;
+}
+
+
+
+/* Styling for the close button inside the modal content */
+#closeModalBtn {
+    background: #ddd;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    margin: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#closeModalBtn:hover {
+    background: #ccc;
+}
+
 
 .pagination {
     display: flex;

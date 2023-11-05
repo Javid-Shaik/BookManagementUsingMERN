@@ -360,12 +360,11 @@ async function isAuthenticated(req, res , next){
 }
 
 // Books views starts from here
-// Admin  functionalities
+// Admin  functionality
 
 async function isAdmin(req, res, next) {
   try {
     const users = req.session.user;
-
     // Assuming you have a User model for querying the database
     const user = await User.findOne({ userName: users.username });
 
@@ -381,6 +380,13 @@ async function isAdmin(req, res, next) {
     res.status(500).send('Error navigating to admin page.');
   }
 }
+app.get('/admin/login', (req , res)=>{
+  const errorMessage = "";
+  res.render('./admin/adminLogin' , { errorMessage , user:req.session.user});
+})
+
+
+app.post('/admin/login', authController.adminLogin);
 
 app.get('/admin', isAdmin, (req, res) => {
   // This route is only accessible to admin users
@@ -529,6 +535,14 @@ app.get('/admin/user-list' , isAdmin,  async (req, res)=>{
   }
 });
 
+
+app.get('/admin/main', isAdmin , async(req, res)=>{
+  res.render('./admin/adminpage');
+})
+
+
+// cart functionality
+
 app.get('/cart/view-books', isAuthenticated, async (req , res)=>{
   try {
     // Fetch all books from the database
@@ -541,7 +555,8 @@ app.get('/cart/view-books', isAuthenticated, async (req , res)=>{
   }
 });
 
-// cart functionality
+
+
 
 app.get('/cart/cover-image/:bookId', async (req, res) => {
   try {

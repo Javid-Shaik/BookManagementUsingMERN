@@ -30,10 +30,16 @@ document.addEventListener("DOMContentLoaded", () => {
                     <p>ISBN: ${ book.isbn }</p>
                     <button onclick="showDetails('${ book._id }')" id="show-details-btn-${ book._id }"><i class="fas fa-info-circle"></i></button>
                     <button onclick="addToCart('${ book._id }','${ user.user_id }')"><i class="fas fa-cart-plus"></i> </button>
-                    <div id="details${ book._id }" style="display: none;">
-                        <!-- Book details will be displayed here when the "Show Details" button is clicked -->
-                        <p>Description: '${ description }'</p>
+                    <div class="modal" id="myModal${ book._id }">
+                        <div class="modal-content">
+                            <span class="close" id="closeModal${book._id}">&times;</span>
+                            <h2>Description</h2>
+                            <p>${ description }</p>
+                            <button id="closeModalBtn${book._id}">Close</button>
+                        </div>
                     </div>
+
+                    
                 </li>`;
             resultsList.appendChild(resultItem);
         }
@@ -92,4 +98,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Initial display
     displayResults();
+
+    
 });
+
+
+

@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const nextPageButton = document.getElementById("next-page");
     const pageNumContainer = document.getElementById("page-num-container");
 
-    const itemsPerPage = 1;
+    const itemsPerPage = 10;
     let currentPage = 1;
     const cartData = JSON.parse(cart); // Replace with your cart data JSON.
     const cartBooks = cartData.items; 

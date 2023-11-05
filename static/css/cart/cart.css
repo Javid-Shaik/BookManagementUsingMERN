@@ -1,6 +1,92 @@
+/* Style for the entire cart item container */
+#cart-list {
+    list-style: none;
+    padding: 0;
+    max-height: 450px;
+    overflow-y: auto;
+    width: 100%;
+}
+
+/* Remove the width constraint for the .row elements */
+.row {
+    width: fit-content;
+    display: flex;
+    align-items: center; /* Vertically center items */
+    justify-content: space-between; /* Spread items horizontally */
+    margin: 10px; /* Add spacing between rows if needed */
+    border: 1px solid #ddd; /* Add a border for visual separation */
+    padding: 10px; /* Add padding for better spacing */
+}
+
+#cart-list li {
+    display: flex;
+    align-items: center;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    max-width: 100%;
+    width: 100%; /* Make the li elements span the entire width of their container */
+}
 
 
+#cart-list li:hover {
+    transform: translateY(-3px);
+}
 
+/* The rest of your styles remain the same */
+
+
+#cart-list li .col-md-3 img {
+    max-width: 100px;
+    height: auto;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#cart-list li .col-md-6 {
+    padding: 15px;
+}
+
+#cart-list li .col-md-6 h5 {
+    font-size: 18px;
+    margin: 5px 0;
+}
+
+#cart-list li .col-md-6 p {
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+#cart-list li .col-md-3 {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+}
+
+#cart-list li .col-md-3 p {
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+#cart-list li .col-md-3 button {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#cart-list li .col-md-3 button:hover {
+    background-color: #c82333;
+}
 
 /* Pagination styles */
 .pagination {
@@ -8,11 +94,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 20px;
-    margin-bottom: 40px;
+    margin: 20px 0 40px 0;
     left: calc(100% - 60%);
     top: calc(100% - 20%);
-
 }
 
 .page-num {
@@ -51,3 +135,5 @@ button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
 }
+
+
