@@ -1,16 +1,15 @@
 
 document.addEventListener("DOMContentLoaded", () => {
-    const resultsList = document.getElementById("results-list");
+    const resultsList = document.getElementById("books-list");
     const prevPageButton = document.getElementById("prev-page");
     const nextPageButton = document.getElementById("next-page");
 
-    const itemsPerPage = 10;
+    const itemsPerPage = 3;
     var currentPage = 1;
-    const searchResults = JSON.parse(searchData);
+    const bookList = JSON.parse(books);
+    const user = JSON.parse(sessionUser);
 
-    const matchingBooks = searchResults.matchingBooks;
-
-    // console.log(matchingBooks);
+    // console.log(bookList);
     
     function displayResults() {
         resultsList.innerHTML = "";
@@ -18,27 +17,30 @@ document.addEventListener("DOMContentLoaded", () => {
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
 
-        for (let i = startIndex; i < endIndex && i < matchingBooks.length; i++) {
-            const book = matchingBooks[i];
+        for (let i = startIndex; i < endIndex && i < bookList.length; i++) {
+            const book = bookList[i];
 
             const resultItem = document.createElement("li");
 
             const description = book.description.length > 100 ? book.description.slice(0, 100) + '.....' : book.description;
             resultItem.innerHTML = `
-                <h2>${book.title}</h2>
-                <p>Author: ${book.author}</p>
-                <p>Description: ${description}</p>
-                <p>ISBN: ${book.isbn}</p>
-                <img src="/images/${book.cover_image}" alt="${book.title}" class="cover-image">
-                <button onclick="addToCart('${book._id}')"><i class="fas fa-cart-plus"></i> </button>
-            `;
+                <li>
+                    <h2>${ book.title }</h2>
+                    <p>Author: ${ book.author }</p>
+                    <p>ISBN: ${ book.isbn }</p>
+                    <button onclick="showDetails('${ book._id }')" id="show-details-btn-${ book._id }"><i class="fas fa-info-circle"></i></button>
+                    <button onclick="addToCart('${ book._id }','${ user.user_id }')"><i class="fas fa-cart-plus"></i> </button>
+                    <div id="details${ book._id }" style="display: none;">
+                        <!-- Book details will be displayed here when the "Show Details" button is clicked -->
+                        <p>Description: '${ description }'</p>
+                    </div>
+                </li>`;
             resultsList.appendChild(resultItem);
         }
         generatePageButtons();
         prevPageButton.disabled = currentPage === 1;
-        nextPageButton.disabled = endIndex >= matchingBooks.length;
+        nextPageButton.disabled = endIndex >= bookList.length;
     }
-
 
 
     function goToPrevPage() {
@@ -50,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function goToNextPage() {
         const startIndex = (currentPage - 1) * itemsPerPage;
-        if (startIndex + itemsPerPage < matchingBooks.length) {
+        if (startIndex + itemsPerPage < bookList.length) {
             currentPage++;
             displayResults();
         }
@@ -67,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
         pageNumContainer.innerHTML = ""; // Clear existing buttons
 
         
-        const totalPages = Math.ceil(matchingBooks.length / itemsPerPage);
+        const totalPages = Math.ceil(bookList.length / itemsPerPage);
         for (let i = 1; i <= totalPages; i++) {
             const pageNumberButton = document.createElement("button");
             pageNumberButton.textContent = i;

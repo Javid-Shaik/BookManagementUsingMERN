@@ -15,6 +15,7 @@ ul {
 h1 {
     text-align: center;
     color: #333;
+    margin-top: 10px;
     margin-bottom: 20px;
 }
 
@@ -65,17 +66,28 @@ h1 {
     border-radius: 5px;
 }
 
-/* Pagination styles */
 .pagination {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 20px 0;
+}
+
+/* Pagination styles */
+.pagination {
+    position: fixed;
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
     margin-top: 20px;
     margin-bottom: 40px;
+    left: calc(100% - 60%);
+    top: calc(100% - 20%);
+
 }
 
 .page-num {
-    padding: 10px 15px;
+    padding: 5px 10px;
     margin: 0 5px;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -100,7 +112,7 @@ button {
     background-color: #007bff;
     color: #fff;
     border: none;
-    padding: 10px 20px;
+    padding: 5px 10px;
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.3s ease;

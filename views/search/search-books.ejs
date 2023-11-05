@@ -18,6 +18,11 @@
         </div>
     </div>
     <script>const searchData = '<%- (data) %>'; </script> <!-- Sending the searc result data to the js file -->
+    <script>
+        function addToCart(bookId) {
+            window.location.href = "/cart/view-books";
+        }
+    </script>
     <script src="/js/search-results.js"></script>
 </body>
 </html>

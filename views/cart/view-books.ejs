@@ -8,25 +8,15 @@
     <title>View Books</title>
 </head>
 <body>
+    <%- include('../header.ejs') %>
     <h1>View Books</h1>
 
-    <ul>
-        <% books.forEach((book, index) => { %>
-            <li>
-                <h2><%= book.title %></h2>
-                <p>Author: <%= book.author %></p>
-                <p>ISBN: <%= book.isbn %></p>
-                <!-- Add more book details as needed -->
-                <button onclick="showDetails('<%= book._id %>','<%= user.user_id %>')" id="show-details-btn-<%= book._id %>"><i class="fas fa-info-circle"></i></button>
-                <button onclick="addToCart('<%= book._id %>','<%= user.user_id %>')"><i class="fas fa-cart-plus"></i> </button>
-                <div id="details<%= book._id %>" style="display: none;">
-                    <!-- Book details will be displayed here when the "Show Details" button is clicked -->
-                    <p>Description: <%= book.description %></p>
-                    <!-- Add more book details as needed -->
-                </div>
-            </li>
-        <% }); %>
-    </ul>
+    <ul id="books-list"></ul>
+    <div class="pagination">
+        <button id="prev-page">Prev</button>
+        <div id="page-num-container"></div>
+        <button id="next-page">Next</button>
+    </div>
 
     <script>
         function showDetails(bookId) {
@@ -71,5 +61,11 @@
         }
 
     </script>
+    <script> 
+        const books = '<%- JSON.stringify(books) %>';
+        const sessionUser = '<%- JSON.stringify(user) %>';
+    </script>
+    <script src="/js/view-books.js"></script>
 </body>
 </html>
+

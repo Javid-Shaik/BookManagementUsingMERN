@@ -718,7 +718,7 @@ app.get('/search-book/:searchOption/:searchText', async (req, res) => {
 app.get('/search/results', (req, res) => {
   const data = req.query.data;
   // console.log(data);
-  res.render('search/search-books', { data });
+  res.render('search/search-books', { data});
 });
 
 
