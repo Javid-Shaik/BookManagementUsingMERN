@@ -28,7 +28,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                     <div class="col-md-6">
                         <h5>${item.bookId?.title ?? 'N/A'}</h5>
-                        <h5>${item.title}</h5>
                         <p>Author: ${item.bookId?.author ?? 'N/A'}</p>
                         <p>ISBN: ${item.bookId?.isbn ?? 'N/A'}</p>
                     </div>
