@@ -536,7 +536,7 @@ app.get('/admin/user-list' , isAdmin,  async (req, res)=>{
 
 
 app.get('/admin/main', isAdmin , async(req, res)=>{
-  res.render('./admin/adminPpage');
+  res.render('./admin/adminPage');
 })
 
 
