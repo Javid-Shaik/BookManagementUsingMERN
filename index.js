@@ -217,6 +217,7 @@ app.post('/register', upload.single('profileImage'), async (req, res) => {
   }
 });
 
+
 app.post('/index' , (req, res)=>{
   const user = req.session.user;
   res.render('index' , { user } );
