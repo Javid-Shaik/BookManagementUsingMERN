@@ -94,12 +94,10 @@ app.use(cookieParser());
 //   next();
 // });
 
-
 const db_password = process.env.PASSWORD
 
 // Connect to MongoDB using the IPv4 loopback address or localhost
 const mongoURI = `mongodb+srv://Javid_Shaik:${db_password}@cluster0.cfidmvh.mongodb.net/BookManagement`; // Specify your database name
-
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,

@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
 
 // Connect to MongoDB using the IPv4 loopback address or localhost
-const mongoURI = 'mongodb+srv://Javid_Shaik:Javkid322@cluster0.cfidmvh.mongodb.net/';
+const dotenv = require('dotenv');
+const db_password = process.env.PASSWORD
+dotenv.config()
+const mongoURI = `mongodb+srv://Javid_Shaik:${db_password}@cluster0.cfidmvh.mongodb.net/BookManagement`;;
 
 mongoose
   .connect(mongoURI, {
